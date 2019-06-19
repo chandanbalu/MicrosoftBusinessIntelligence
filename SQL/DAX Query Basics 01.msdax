@@ -1,0 +1,38 @@
+EVALUATE
+(
+	FILTER(
+	SUMMARIZE(
+     'FactContactEvents',
+	 'DimCalendar'[FiscalYearQtr],
+	 'FactContactEvents'[Case Id],
+	 'DimProductLine'[ProductLine],
+	 'FactContactEvents'[HPCE],
+	 'FactContactEvents'[DBD Flag],
+	 'DimInterventionsFlag'[Interventions Flag],
+	 'DimFinancialFlag'[FinancialFlag],
+	 'DimDeliveryAlternative'[Raw Case Delivery],  
+	 'DimFieldTransformation'[Territory],
+	 --'FactContactEvents'[CDAX_HPI_Segment],
+	 --'FactContactEvents'[CS_PL],
+	-- 'FactContactEvents'[CS SPL],
+	 'DimCountry'[SubRegion2 Name],
+	 'DimFinancialBFNon-BF'[BF - Non-BF],
+	 'DimFinancialDataType'[Data Type],
+	 'DimFinancialDirectIndirect'[Direct or Indirect]
+	-- 'DimFinancialInterventionsCategory'[Interventions Category]
+	),
+    ('DimCountry'[SubRegion2 Name]="United States" ||
+   'DimCountry'[SubRegion2 Name]="Canada")
+   && ('DimCalendar'[FiscalYearQtr]="2018Q3" )
+   && ('DimDeliveryAlternative'[Raw Case Delivery]="HP CE Onsite" ||
+   'DimDeliveryAlternative'[Raw Case Delivery]="Subcontractor Onsite")
+
+   -- && 'DimDeliveryAlternative'[Master Subcase Delivery]="Onsite"
+&& 'DimFinancialFlag'[FinancialFlag]="Financial"
+&& 'DimFinancialBFNon-BF'[BF - Non-BF]="Breakfix"
+&& 'DimFinancialDataType'[Data Type]="Actuals"
+&& 'DimFinancialDirectIndirect'[Direct or Indirect]="Direct"
+   )
+)
+
+

@@ -1,0 +1,25 @@
+SELECT 
+	NON EMPTY{ 
+		[Measures].[Case Volume],
+		[Measures].[Single Visit Met%],
+		[Measures].[Response Time],
+		[Measures].[E2E Resolution NET %]
+	} ON COLUMNS
+	-- FILTERS and AXIS
+	,NON EMPTY({(
+		[DimCalendar].[FiscalDatePeriod].&[WK40 FY18 (Aug03)]
+		,[DimDeliveryAlternative].[Master Case Delivery].&[Onsite]
+		,[DimDBDFlag].[DBD Flag].Members
+		)}) ON ROWS
+FROM  [Model]
+--FILTER
+WHERE (
+		  {[DimCountry].[SubRegion2 Name].&[Canada],[DimCountry].[SubRegion2 Name].&[United States]}
+		  ,[DimCDXHPISegment].[CDAX_HPI_Segment].&[Commercial]
+		  ,[DimCSPL].[CS_PL].&[Yes]
+		  ,[DimCSServicePL].[Service PL].[All]
+		  ,[DimMasterBusinessSegment].[Master Business Segment].[All]
+		  ,[DimMPSFlag].[MasterMPSFlag].[All]
+		  ,[DimCalendar].[FiscalYearMonthName].[All]
+		  --,[DimCalendar].[FiscalDatePeriod].&[WK40 FY18 (Aug03)]
+	  )
